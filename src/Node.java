@@ -4,9 +4,9 @@ public class Node {
 
     private Node parentNode;
     private Node smallChild;
-    private Node midNode;
+    private Node midChild;
     private Node largeChild;
-    private Node tempLargestNode;
+    private Node tempLargestChild;
 
     private Integer smallKey;
     private Integer largeKey;
@@ -23,8 +23,9 @@ public class Node {
 
         this.smallKey = smallKey;
         smallChild = null;
-        midNode = null;
+        midChild = null;
         largeChild = null;
+        tempLargestChild = null;
     }
 
 
@@ -33,22 +34,83 @@ public class Node {
      */
 
 
-    public Node splitNode() {
-
-        if(parentNode.getMidChild() != null)
+    public void splitNode()
+    {
+        //is leaf node
+        if(largeKey == null)
         {
-            Node[] nodeArr = [parentNode.getLeftChild(), parentNode.getMidChild()]
+            //parent has 3 nodes
+            if (parentNode.getMidChild() != null)
+            {
+                //this node is the smaller Child
+                if(this == parentNode.getSmallChild() )
+                {
+                   parentNode.setTempLargestChild(parentNode.getLargeChild());
+                   parentNode.setLargeChild(parentNode.getMidChild());
+                   parentNode.setMidChild(new Node(largeKey));
+                   parentNode.setSmallChild(new Node(smallKey));
+                }
+                //this is the Mid Child
+                else if(this == parentNode.getMidChild())
+                {
+                    parentNode.setTempLargestChild(parentNode.getLargeChild());
+                    parentNode.setLargeChild(new Node(largeKey));
+                    parentNode.setMidChild(new Node(smallKey));
+                }
+                //this is the Largest Child
+
+                parentNode.setTempLargestChild(new Node(largeKey));
+                parentNode.setLargeChild(new Node(smallKey));
+            }
+            //parent has 2 nodes
+            else  if(parentNode.getMidChild() == null)
+           {
+               //this is the smaller child
+
+                if (this == parentNode.getSmallChild()) {
+
+                    Node newSmallChild = new Node(smallKey);
+                    newSmallChild.setSmallChild(smallChild);
+                    newSmallChild.setMidChild(midChild);
+                    parentNode.setSmallChild(newSmallChild);
+
+                    Node newMidChild = new Node(largeKey);
+                    newMidChild.setSmallChild(largeChild);
+                    newMidChild.setLargeChild(tempLargestChild);
+                    parentNode.setMidChild(newMidChild);
+
+                   return;
+                }
+                //this is the large child
+                Node newMidChild = new Node(smallKey);
+                newMidChild.setSmallChild(smallChild);
+                newMidChild.setLargeChild(midChild);
+                parentNode.setMidChild(newMidChild);
+
+                Node newLargeChild = new Node(largeKey);
+                newLargeChild.setSmallChild(largeChild);
+                newLargeChild.setLargeChild(tempLargestChild);
+                parentNode.setLargeChild(newLargeChild);
+               return;
+            }
+            //parent has 3 nodes
+
+
+
         }
 
 
 
-
-
-        return parentNode;
-
     }
 
-    public void promoteTempMidKey() {
+    public void promoteTempMidKey()
+    {
+
+        if(parentNode.has1Key())
+        {
+            parentNode.setLargeKey(tempMidKey);
+            tempMidKey = null;
+        }
 
     }
 
@@ -60,7 +122,7 @@ public class Node {
     /*
       -------------- Getters------------------
      */
-    public Node getRightChild() {
+    public Node getLargeChild() {
 
         return largeChild;
     }
@@ -72,12 +134,12 @@ public class Node {
     }
 
 
-    public Node getTempLargestNode() {
-        return tempLargestNode;
+    public Node getTempLargestChild() {
+        return tempLargestChild;
     }
 
 
-    public Node getLeftChild() {
+    public Node getSmallChild() {
 
         return smallChild;
     }
@@ -85,7 +147,7 @@ public class Node {
 
     public Node getMidChild() {
 
-        return midNode;
+        return midChild;
     }
 
 
@@ -136,7 +198,7 @@ public class Node {
     }
 
 
-    public void setLeftChild(Node son) {
+    public void setSmallChild(Node son) {
 
         this.smallChild = son;
     }
@@ -149,10 +211,10 @@ public class Node {
 
     public void setMidChild(Node son) {
 
-        this.midNode = son;
+        this.midChild = son;
     }
 
-    // finds and stores the midNode value key by storing it in temp key based on input value
+    // finds and stores the midChild value key by storing it in temp key based on input value
     public void setTempMidKey(Integer tempMidKey) {
         if(tempMidKey > this.largeKey)
         {
@@ -175,12 +237,12 @@ public class Node {
     }
 
 
-    public void setTempLargestNode(Node tempLargestNode) {
-        this.tempLargestNode = tempLargestNode;
+    public void setTempLargestChild(Node tempLargestChild) {
+        this.tempLargestChild = tempLargestChild;
     }
 
 
-    public void setRightChild(Node son) {
+    public void setLargeChild(Node son) {
 
         this.largeChild = son;
     }
@@ -199,7 +261,7 @@ public class Node {
      */
     public boolean isLeaf() {
 
-        return smallChild == null && midNode == null && largeChild == null;
+        return smallChild == null && midChild == null && largeChild == null;
     }
 
     public boolean has1Key() {

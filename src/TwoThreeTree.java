@@ -14,7 +14,6 @@ public class TwoThreeTree
 
     }
 
-
     public void insert(int element)
     {
         if(root == null)
@@ -32,25 +31,30 @@ public class TwoThreeTree
     {
 
         //Condition for node being leaf and does not have the element already inside of it
-        if(currentNode.isLeaf() && !currentNode.hasElement())
+        if(currentNode.isLeaf())
         {
+
             size++;
-            while (!currentNode.has1Key())
+            if(currentNode.has1Key())
             {
-                //this is the case when you are splitting the root node
-                if( currentNode.getParentNode() == null)
-                {
-                   splitRootNode();
+                currentNode.setLargeKey(element);
+                return;
+            }
 
-                }
+            currentNode.setTempMidKey(element);
+            currentNode.promoteTempMidKey();
+            currentNode.splitNode();
 
+            while(currentNode.getParentNode().has3Keys())
+            {
+                currentNode = currentNode.getParentNode();
                 currentNode.promoteTempMidKey();
                 currentNode.splitNode();
-                currentNode = currentNode.getParentNode();
-
-
-
             }
+
+
+            return;
+
         }
 
         /**
@@ -65,12 +69,12 @@ public class TwoThreeTree
             //search left
             else if (currentNode.getSmallKey() >  element)
             {
-                insertI(element,currentNode.getLeftChild());
+                insertI(element,currentNode.getSmallChild());
             }
             //search right
             else
             {
-                insertI(element,currentNode.getRightChild());
+                insertI(element,currentNode.getLargeChild());
             }
 
     }
@@ -121,12 +125,12 @@ public class TwoThreeTree
         //search left
         else if (currentNode.getSmallKey() >  val)
         {
-           return searchI(val,currentNode.getLeftChild());
+           return searchI(val,currentNode.getSmallChild());
         }
         //search right
         else
         {
-            return searchI(val,currentNode.getRightChild());
+            return searchI(val,currentNode.getLargeChild());
         }
 
 
@@ -145,8 +149,8 @@ public class TwoThreeTree
            leftNode.setParentNode(root);
            rightNode.setParentNode(root);
 
-           root.setLeftChild(leftNode);
-           root.setRightChild(rightNode);
+           root.setSmallChild(leftNode);
+           root.setLargeChild(rightNode);
            return;
        }
    }
