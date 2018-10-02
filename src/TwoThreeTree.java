@@ -48,6 +48,11 @@ public class TwoThreeTree
             while(currentNode.getParentNode().has3Keys())
             {
                 currentNode = currentNode.getParentNode();
+                if(currentNode == root)
+                {
+                    splitRootNode();
+                    return;
+                }
                 currentNode.promoteTempMidKey();
                 currentNode.splitNode();
             }
