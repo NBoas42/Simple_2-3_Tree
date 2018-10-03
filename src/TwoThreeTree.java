@@ -14,8 +14,15 @@ public class TwoThreeTree
 
     }
 
+    public void printTree()
+    {
+            System.out.println(root.getLargeChild().getSmallKey() + " " + root.getLargeChild().getLargeKey());
+    }
+
     public void insert(int element)
     {
+
+
         if(root == null)
         {
             root = new Node(element);
@@ -34,6 +41,7 @@ public class TwoThreeTree
         if(currentNode.isLeaf())
         {
 
+
             size++;
             if(currentNode.has1Key())
             {
@@ -41,13 +49,33 @@ public class TwoThreeTree
                 return;
             }
 
+            if(currentNode == root)
+            {
+                currentNode.setTempMidKey(element);
+                splitRootNode();
+                return;
+            }
+
             currentNode.setTempMidKey(element);
             currentNode.promoteTempMidKey();
             currentNode.splitNode();
 
-            while(currentNode.getParentNode().has3Keys())
+
+
+            System.out.println(currentNode.getParentNode().getLargeKey());
+
+            while(currentNode.getParentNode().getTempMidKey() != null)
             {
+
                 currentNode = currentNode.getParentNode();
+
+                if(currentNode == root)
+                {
+                    currentNode.setTempMidKey(element);
+                    splitRootNode();
+                    return;
+                }
+
                 currentNode.promoteTempMidKey();
                 currentNode.splitNode();
             }
@@ -61,8 +89,10 @@ public class TwoThreeTree
          * From here we recursively search through the tree to find leaf
          *
          */
+
+
         //search mid if there is a mid node
-            if( currentNode.getSmallKey() < element && element < currentNode.getLargeKey() && currentNode.getMidChild() != null)
+            if( currentNode.getMidChild() != null && currentNode.getSmallKey() < element && element < currentNode.getLargeKey())
             {
                 insertI(element,currentNode.getMidChild());
             }
@@ -87,6 +117,9 @@ public class TwoThreeTree
 
     private String searchI (int val, Node currentNode)
     {
+
+
+        //System.out.println(currentNode.getSmallKey());
 
         boolean isFoundInNode = currentNode.getSmallKey() == val || (currentNode.getLargeKey() != null && currentNode.getLargeKey() == val);
 
@@ -139,20 +172,28 @@ public class TwoThreeTree
 
    private void splitRootNode()
    {
-       if(size == 3) {
-           root = new Node(root.getTempMidKey());
 
 
-           Node leftNode = new Node(root.getSmallKey());
-           Node rightNode = new Node(root.getLargeKey());
 
-           leftNode.setParentNode(root);
-           rightNode.setParentNode(root);
 
-           root.setSmallChild(leftNode);
-           root.setLargeChild(rightNode);
+
+
+           Node smallChild = new Node(root.getSmallKey());
+           Node largeChild = new Node(root.getLargeKey());
+
+
+           smallChild.setParentNode(root);
+           largeChild.setParentNode(root);
+
+            root = new Node(root.getTempMidKey());
+
+           root.setSmallChild(smallChild);
+           root.setLargeChild(largeChild);
+
+
+
            return;
-       }
+
    }
 
 
