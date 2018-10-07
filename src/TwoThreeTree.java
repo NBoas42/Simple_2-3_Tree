@@ -16,7 +16,9 @@ public class TwoThreeTree
 
     public void printTree()
     {
-            System.out.println(root.getLargeChild().getSmallKey() + " " + root.getLargeChild().getLargeKey());
+
+        if()
+
     }
 
     public void insert(int element)
@@ -60,9 +62,6 @@ public class TwoThreeTree
             currentNode.promoteTempMidKey();
             currentNode.splitNode();
 
-
-
-            System.out.println(currentNode.getParentNode().getLargeKey());
 
             while(currentNode.getParentNode().getTempMidKey() != null)
             {
@@ -172,27 +171,22 @@ public class TwoThreeTree
 
    private void splitRootNode()
    {
+       Node smallChild = new Node(root.getSmallKey());
+       Node largeChild = new Node(root.getLargeKey());
+
+       int temp = root.getTempMidKey();
+
+       root = new Node(temp);
+
+       root.setSmallChild(smallChild);
+       root.setLargeChild(largeChild);
+
+       root.getLargeChild().setParentNode(root);
+       root.getSmallChild().setParentNode(root);
 
 
 
-
-
-
-           Node smallChild = new Node(root.getSmallKey());
-           Node largeChild = new Node(root.getLargeKey());
-
-
-           smallChild.setParentNode(root);
-           largeChild.setParentNode(root);
-
-            root = new Node(root.getTempMidKey());
-
-           root.setSmallChild(smallChild);
-           root.setLargeChild(largeChild);
-
-
-
-           return;
+       return;
 
    }
 

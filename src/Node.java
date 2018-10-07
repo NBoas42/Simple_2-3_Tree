@@ -36,11 +36,6 @@ public class Node {
 
     public void splitNode()
     {
-
-        //is leaf node
-        if(isLeaf())
-        {
-
             /**parent has 3 nodes*/
             if (parentNode.getMidChild() != null)
             {
@@ -52,11 +47,15 @@ public class Node {
                     parentNode.setLargeChild(parentNode.getMidChild());
 
                     Node newSmallChild = new Node(smallKey);
+                    newSmallChild.setSmallChild(smallChild);
+                    newSmallChild.setLargeChild(midChild);
                     newSmallChild.setParentNode(parentNode);
                     parentNode.setSmallChild(newSmallChild);
 
 
                     Node newMidChild = new Node(largeKey);
+                    newSmallChild.setSmallChild(largeChild);
+                    newSmallChild.setLargeChild(tempLargestChild);
                     newMidChild.setParentNode(parentNode);
                     parentNode.setMidChild(newMidChild);
                     return;
@@ -68,25 +67,37 @@ public class Node {
 
                     parentNode.setTempLargestChild(parentNode.getLargeChild());
 
-                    Node newLargeChild = new Node(largeKey);
-                    newLargeChild.setParentNode(parentNode);
-                    parentNode.setLargeChild(newLargeChild);
+
 
                     Node newMidChild = new Node(smallKey);
+                    newMidChild.setSmallChild(smallChild);
+                    newMidChild.setLargeChild(midChild);
                     newMidChild.setParentNode(parentNode);
-
                     parentNode.setMidChild(newMidChild);
+
+
+                    Node newLargeChild = new Node(largeKey);
+                    newLargeChild.setSmallChild(largeChild);
+                    newLargeChild.setLargeChild(tempLargestChild);
+                    newLargeChild.setParentNode(parentNode);
+                    parentNode.setLargeChild(newLargeChild);
 
                     return;
                 }
                 //this is the Largest Child
-                Node newTempLargestChild = new Node(largeKey);
-                newTempLargestChild.setParentNode(parentNode);
-                parentNode.setTempLargestChild(newTempLargestChild);
+
 
                 Node newLargeChild = new Node(smallKey);
+                newLargeChild.setSmallChild(smallChild);
+                newLargeChild.setLargeChild(midChild);
                 newLargeChild.setParentNode(parentNode);
                 parentNode.setLargeChild(newLargeChild);
+
+                Node newTempLargestChild = new Node(largeKey);
+                newTempLargestChild.setSmallChild(largeChild);
+                newTempLargestChild.setLargeChild(tempLargestChild);
+                newTempLargestChild.setParentNode(parentNode);
+                parentNode.setTempLargestChild(newTempLargestChild);
 
                 return;
             }
@@ -98,49 +109,10 @@ public class Node {
                 if (this == parentNode.getSmallChild()) {
 
                     Node newSmallChild = new Node(smallKey);
+
                     newSmallChild.setParentNode(parentNode);
-                    parentNode.setSmallChild(newSmallChild);
-
-                    Node newMidChild = new Node(largeKey);
-                    newMidChild.setParentNode(parentNode);
-                    parentNode.setMidChild(newMidChild);
-
-                    return;
-                }
-
-                System.out.println("Work" + " " + smallKey + " " + tempMidKey + " " +  largeKey);
-
-
-
-                //this is the large child
-                Node newMidChild = new Node(smallKey);
-                newMidChild.setParentNode(parentNode);
-                parentNode.setMidChild(newMidChild);
-
-                Node newLargeChild = new Node(largeKey);
-                newLargeChild.setParentNode(parentNode);
-                parentNode.setLargeChild(newLargeChild);
-
-
-
-            return;
-        }
-
-
-
-        //Not a leaf node
-            //parent has 3 nodes
-            //this node is the smallest child node
-                if(this == parentNode.getSmallChild())
-                {
-
-                    parentNode.setTempLargestChild(parentNode.getLargeChild());
-                    parentNode.setLargeChild(parentNode.getMidChild());
-
-                    Node newSmallChild = new Node(smallKey);
                     newSmallChild.setSmallChild(smallChild);
                     newSmallChild.setLargeChild(midChild);
-                    newSmallChild.setParentNode(parentNode);
                     parentNode.setSmallChild(newSmallChild);
 
                     Node newMidChild = new Node(largeKey);
@@ -149,38 +121,21 @@ public class Node {
                     newMidChild.setParentNode(parentNode);
                     parentNode.setMidChild(newMidChild);
 
+                    return;
                 }
-                //this node is the mid child node
-                else if(this == parentNode.getMidChild())
-                {
-                    parentNode.setTempLargestChild(parentNode.getLargeChild());
+                //this is the large child
+                Node newMidChild = new Node(smallKey);
+                newMidChild.setSmallChild(smallChild);
+                newMidChild.setLargeChild(midChild);
+                newMidChild.setParentNode(parentNode);
+                parentNode.setMidChild(newMidChild);
 
-                    Node newMidChild = new Node(smallKey);
-                    newMidChild.setSmallChild(smallChild);
-                    newMidChild.setLargeChild(midChild);
-                    newMidChild.setParentNode(parentNode);
-                    parentNode.setMidChild(newMidChild);
-
-                    Node newLargeChild = new Node(largeKey);
-                    newLargeChild.setSmallChild(largeChild);
-                    newLargeChild.setLargeChild(tempLargestChild);
-                    newLargeChild.setParentNode(parentNode);
-                    parentNode.setLargeChild(newLargeChild);
-                }
-                //this node is the large child node
-
-            Node newLargeChild = new Node(smallKey);
-            newLargeChild.setSmallChild(smallChild);
-            newLargeChild.setLargeChild(midChild);
-            newLargeChild.setParentNode(parentNode);
-            parentNode.setLargeChild(newLargeChild);
-
-            Node newTempLargestChild = new Node(largeKey);
-            newTempLargestChild.setSmallChild(largeChild);
-            newTempLargestChild.setLargeChild(tempLargestChild);
-            newTempLargestChild.setParentNode(parentNode);
-            parentNode.setTempLargestChild(newTempLargestChild);
-
+                Node newLargeChild = new Node(largeKey);
+                newLargeChild.setSmallChild(largeChild);
+                newLargeChild.setLargeChild(tempLargestChild);
+                newLargeChild.setParentNode(parentNode);
+                parentNode.setLargeChild(newLargeChild);
+                return;
 
         }
 
@@ -307,11 +262,10 @@ public class Node {
     }
 
     // finds and stores the midChild value key by storing it in temp key based on input value
-    public void setTempMidKey(Integer tempMidKey) {
+    public void setTempMidKey(Integer tempMidKey)
+    {
 
-        if(largeKey != null) {
-
-            if (tempMidKey > this.largeKey)
+        if (tempMidKey > this.largeKey)
             {
 
                 this.tempMidKey = largeKey;
@@ -332,10 +286,7 @@ public class Node {
                 }
 
             return;
-        }
 
-
-        setLargeKey(tempMidKey);
     }
 
 
